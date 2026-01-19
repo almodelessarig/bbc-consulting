@@ -1212,7 +1212,7 @@
             </div>
             <div class="border-t border-gray-800 mt-6 pt-6 text-center text-sm">
                 <p class="mb-2">© 2026 Big Business Consulting. Все права защищены.</p>
-                <a href="/privacy.html" class="hover:text-white transition">Политика конфиденциальности</a>
+                <a href="/privacy" class="hover:text-white transition">Политика конфиденциальности</a>
             </div>
         </div>
     </footer>
@@ -1606,14 +1606,14 @@
                         const result = await response.json();
 
                         if (result.success) {
-                            window.location.href = '/thank-you.html';
+                            window.location.href = '/thank-you';
                         } else {
                             alert('Произошла ошибка при отправке заявки. Пожалуйста, позвоните нам.');
                         }
                     } catch (error) {
                         console.error('Error:', error);
                         // Даже при ошибке перенаправляем, чтобы не потерять клиента
-                        window.location.href = '/thank-you.html';
+                        window.location.href = '/thank-you';
                     }
                 }
             }
