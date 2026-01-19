@@ -1512,15 +1512,48 @@
                         this.step++;
                     }
                 },
-                submitForm() {
-                    // Log form data
-                    console.log('Form Submitted:', this.answers);
+                async submitForm() {
+                    // Получаем UTM метки из URL
+                    const urlParams = new URLSearchParams(window.location.search);
 
-                    // Here you would add your actual Fetch/Axios call to backend
-                    // fetch('/api/submit', { method: 'POST', body: JSON.stringify(this.answers) })
+                    // Формируем данные для отправки
+                    const formData = {
+                        name: this.answers.name,
+                        phone: this.answers.phone,
+                        employees: this.answers.employees,
+                        turnover: this.answers.turnover,
+                        services: this.answers.type,
+                        problems: this.answers.pains.join(', '),
+                        utm_source: urlParams.get('utm_source') || '',
+                        utm_medium: urlParams.get('utm_medium') || '',
+                        utm_campaign: urlParams.get('utm_campaign') || '',
+                        utm_term: urlParams.get('utm_term') || '',
+                        utm_content: urlParams.get('utm_content') || '',
+                        page_url: window.location.href,
+                        referrer: document.referrer
+                    };
 
-                    // Redirect to thank-you page
-                    window.location.href = '/thank-you.html';
+                    try {
+                        const response = await fetch('/api/send-telegram', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(formData)
+                        });
+
+                        const result = await response.json();
+
+                        if (result.success) {
+                            window.location.href = '/thank-you.html';
+                        } else {
+                            alert('Произошла ошибка при отправке заявки. Пожалуйста, позвоните нам.');
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        // Даже при ошибке перенаправляем, чтобы не потерять клиента
+                        window.location.href = '/thank-you.html';
+                    }
                 }
             }
         }
