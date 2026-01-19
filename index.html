@@ -1215,7 +1215,7 @@
     </footer>
 
     <!-- WhatsApp Widget -->
-    <div x-data="{ waOpen: false }" class="hidden md:block fixed bottom-8 left-8 z-50">
+    <div x-data="{ waOpen: false }" class="hidden md:block fixed bottom-8 right-8 z-50">
         <!-- Chat Window -->
         <div x-show="waOpen"
              x-transition:enter="transition ease-out duration-300"
@@ -1224,7 +1224,7 @@
              x-transition:leave="transition ease-in duration-200"
              x-transition:leave-start="opacity-100 scale-100 translate-y-0"
              x-transition:leave-end="opacity-0 scale-90 translate-y-4"
-             class="absolute bottom-20 left-0 w-80 bg-white rounded-2xl shadow-2xl overflow-hidden"
+             class="absolute bottom-20 right-0 w-80 bg-white rounded-2xl shadow-2xl overflow-hidden"
              style="display: none;">
 
             <!-- Header -->
