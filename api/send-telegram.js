@@ -1,8 +1,11 @@
-// Vercel Serverless Function для отправки заявок в Telegram
+// Vercel Serverless Function для отправки заявок в Telegram и Bitrix24
 export default async function handler(req, res) {
   // Настройки Telegram бота
   const TELEGRAM_BOT_TOKEN = '8594639110:AAGH2RDDc_JvCj7h4yiMBQNxQcwkzr4Z3sg';
   const TELEGRAM_CHAT_ID = '-5159467674';
+
+  // Настройки Bitrix24
+  const BITRIX_WEBHOOK_URL = 'https://bigbusinessconsulting.bitrix24.kz/rest/165/ojxcxfxtutwr8t0f/';
 
   // CORS заголовки
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -100,6 +103,61 @@ export default async function handler(req, res) {
         message: 'Ошибка отправки заявки'
       });
       return;
+    }
+
+    // Отправка лида в Bitrix24
+    try {
+      const bitrixUrl = `${BITRIX_WEBHOOK_URL}crm.lead.add.json`;
+
+      // Формируем комментарий с данными квиза и UTM
+      const comment = `Данные из квиза:
+- Сотрудников: ${employees}
+- Оборот: ${turnover}
+- Услуги: ${services}
+- Проблемы: ${problems}
+
+UTM-метки:
+- Source: ${utm_source}
+- Medium: ${utm_medium}
+- Campaign: ${utm_campaign}
+- Term: ${utm_term}
+- Content: ${utm_content}
+
+Страница: ${page_url}
+Источник перехода: ${referrer}`;
+
+      const bitrixResponse = await fetch(bitrixUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          fields: {
+            TITLE: `Заявка с сайта: ${name}`,
+            NAME: name,
+            PHONE: [{ VALUE: phone, VALUE_TYPE: 'WORK' }],
+            SOURCE_ID: 'WEB',
+            SOURCE_DESCRIPTION: 'Сайт big-business-consulting.kz',
+            COMMENTS: comment,
+            UTM_SOURCE: utm_source !== 'Прямой заход' ? utm_source : '',
+            UTM_MEDIUM: utm_medium !== '-' ? utm_medium : '',
+            UTM_CAMPAIGN: utm_campaign !== '-' ? utm_campaign : '',
+            UTM_TERM: utm_term !== '-' ? utm_term : '',
+            UTM_CONTENT: utm_content !== '-' ? utm_content : '',
+          }
+        })
+      });
+
+      const bitrixData = await bitrixResponse.json();
+
+      if (bitrixData.error) {
+        console.error('Bitrix24 API error:', bitrixData);
+      } else {
+        console.log('Lead created in Bitrix24, ID:', bitrixData.result);
+      }
+    } catch (bitrixError) {
+      console.error('Bitrix24 error:', bitrixError);
+      // Не прерываем выполнение - Telegram уже отправлен
     }
 
     res.status(200).json({
