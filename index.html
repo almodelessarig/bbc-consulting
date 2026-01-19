@@ -55,19 +55,25 @@
             scrollbar-width: none;
         }
         [x-cloak] { display: none !important; }
+
+        /* Анимация пульсации стрелки вниз */
+        @keyframes bounce-arrow {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        .animate-bounce-arrow {
+            animation: bounce-arrow 1s infinite;
+        }
     </style>
 </head>
 <body class="bg-bgLight text-gray-800 font-sans antialiased relative" x-data="quizApp()">
 
-    <div class="bg-[#FEF3C7] text-gray-900 py-3 px-4 text-center sticky top-0 z-50 border-b border-yellow-300 shadow-sm" x-data="{ show: true }" x-show="show">
+    <div class="bg-[#FEF3C7] text-[#92400E] py-3 px-4 text-center sticky top-0 z-50 border-b border-yellow-300 shadow-sm" x-data="{ show: true }" x-show="show">
         <div class="container mx-auto flex justify-between items-center max-w-6xl">
             <div class="flex-1 text-sm md:text-base font-medium flex justify-center items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                </svg>
-                <span>⚠️ С 1 января 2026 — новый Налоговый кодекс. НДС 16%, порог снижен вдвое. Ваш бизнес готов?</span>
+                <span>⚠️ С 1 января 2026 — НДС 16%, порог 43 млн. Ваш бизнес готов?</span>
             </div>
-            <button @click="show = false" class="ml-4 text-gray-500 hover:text-gray-800 focus:outline-none">
+            <button @click="show = false" class="ml-4 text-[#92400E] hover:text-gray-800 focus:outline-none">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
@@ -99,70 +105,111 @@
         </div>
     </header>
 
-    <section class="relative pt-12 pb-20 overflow-hidden bg-gradient-to-b from-white to-blue-50">
-        <div class="container mx-auto px-4 md:px-6">
-            <div class="flex flex-col lg:flex-row items-center gap-12">
-                <div class="w-full lg:w-3/5" data-aos="fade-right">
-                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-primary leading-tight mb-4 md:mb-6">
-                        Защита бизнеса <br>с четырёх сторон
+    <!-- Hero Section -->
+    <section id="hero" class="relative bg-gradient-to-b from-white to-blue-50">
+        <div class="container mx-auto px-4 py-12 lg:py-16">
+            <div class="grid lg:grid-cols-5 gap-8 lg:gap-12 items-center">
+
+                <!-- Левая колонка -->
+                <div class="lg:col-span-3 order-2 lg:order-1" data-aos="fade-right">
+
+                    <!-- Заголовок H1 -->
+                    <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-[#1E3A5F] leading-tight">
+                        4 специалиста по цене одного — на защите вашего бизнеса
                     </h1>
-                    <p class="text-lg md:text-xl text-gray-600 mb-4 md:mb-8 max-w-2xl">
-                        Бухгалтер, налоговик, юрист и кадровик работают на вас как единая команда.
-                        Ответственность застрахована на <span class="font-bold text-primary bg-blue-100 px-1 rounded">100 млн ₸</span>.
+
+                    <!-- Подзаголовок -->
+                    <p class="mt-4 text-lg md:text-xl text-gray-600 leading-relaxed">
+                        Бухгалтер, налоговик, юрист и кадровик в одном пакете<br>
+                        <span class="font-semibold text-[#1E3A5F]">от 150 000 ₸/мес</span> — в 5 раз дешевле штата
                     </p>
 
-                    <!-- CTA кнопка сразу после описания на мобильном -->
-                    <div class="flex flex-col sm:flex-row gap-4 mb-6 md:hidden">
-                        <button @click="openQuiz" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-lg text-lg shadow-lg hover:shadow-xl transition transform hover:-translate-y-1 w-full text-center">
-                            Получить консультацию
-                        </button>
-                        <p class="text-sm text-gray-500 text-center">Перезвоним в течение 15 минут</p>
-                    </div>
-
-                    <ul class="space-y-4 mb-6 md:mb-10">
+                    <!-- Буллеты с преимуществами -->
+                    <ul class="mt-6 space-y-3">
                         <li class="flex items-start gap-3">
-                            <div class="mt-1 flex-shrink-0 w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                            </div>
-                            <span class="text-gray-700 font-medium">В 4-5 раз дешевле, чем держать специалистов в штате</span>
+                            <span class="text-green-500 font-bold text-lg flex-shrink-0">✓</span>
+                            <span class="text-gray-700">Найдём переплаты <span class="text-gray-500">(клиенты экономят от 1,5 до 300 млн ₸)</span></span>
                         </li>
                         <li class="flex items-start gap-3">
-                            <div class="mt-1 flex-shrink-0 w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                            </div>
-                            <span class="text-gray-700 font-medium">Отвечаем за ошибки своими деньгами — страховка до 100 млн ₸</span>
+                            <span class="text-green-500 font-bold text-lg flex-shrink-0">✓</span>
+                            <span class="text-gray-700">Защитим при проверках <span class="text-gray-500">(98% выигранных споров)</span></span>
                         </li>
                         <li class="flex items-start gap-3">
-                            <div class="mt-1 flex-shrink-0 w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                            </div>
-                            <span class="text-gray-700 font-medium">15 лет защищаем бизнес в Казахстане</span>
+                            <span class="text-green-500 font-bold text-lg flex-shrink-0">✓</span>
+                            <span class="text-gray-700">Взыщем долги <span class="text-gray-500">(рекорд — 42 млн ₸)</span></span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-green-500 font-bold text-lg flex-shrink-0">✓</span>
+                            <span class="text-gray-700">Оформим кадры без риска шантажа при увольнении</span>
                         </li>
                     </ul>
 
-                    <!-- CTA кнопка для десктопа -->
-                    <div class="hidden md:flex flex-col sm:flex-row gap-4">
-                        <button @click="openQuiz" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-lg text-lg shadow-lg hover:shadow-xl transition transform hover:-translate-y-1 w-full sm:w-auto text-center">
-                            Получить бесплатную консультацию
-                        </button>
+                    <!-- Призыв к действию -->
+                    <div class="mt-8 text-center lg:text-left">
+                        <p class="text-gray-700 font-medium mb-2">
+                            5 вопросов — и вы узнаете, где вас могут ударить:<br>
+                            налоговая, сотрудники или контрагенты
+                        </p>
+                        <div class="text-blue-600 text-2xl animate-bounce-arrow">↓</div>
                     </div>
-                    <p class="hidden md:block mt-3 text-sm text-gray-500">Перезвоним в течение 15 минут в рабочее время</p>
-                </div>
 
-                <!-- Фото основателя - только на десктопе -->
-                <div class="hidden lg:block w-full lg:w-2/5 relative" data-aos="fade-left">
-                    <div class="relative z-10">
-                        <img src="img/Nurlan.png" alt="Нурлан Джарманов, основатель BBC" class="rounded-2xl shadow-2xl w-full object-cover h-[500px] lg:h-[600px]">
+                    <!-- CTA блок -->
+                    <div class="mt-4 flex flex-col sm:flex-row gap-4 items-center lg:items-start">
+                        <!-- Кнопка -->
+                        <button @click="openQuiz"
+                                class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-semibold
+                                       py-4 px-8 rounded-lg shadow-lg hover:shadow-xl transition-all
+                                       transform hover:scale-[1.02]">
+                            Проверить бизнес на риски — бесплатно
+                        </button>
 
-                        <div class="absolute bottom-6 left-6 right-6 bg-white/95 backdrop-blur p-4 rounded-xl shadow-lg border-l-4 border-accent">
-                            <p class="font-bold text-primary text-lg">Нурлан Джарманов</p>
-                            <p class="text-sm text-gray-600">Основатель BBC, эксперт по налоговой оптимизации</p>
-                            <p class="text-xs text-gray-500 mt-1">15 лет в консалтинге • Сэкономили клиентам 500+ млн ₸</p>
+                        <!-- Плашка страховки -->
+                        <div class="flex items-center gap-2 bg-green-50 border border-green-500
+                                    text-green-800 py-3 px-5 rounded-lg cursor-help group relative"
+                             title="Если мы ошибёмся — заплатит страховая, не вы">
+                            <span class="text-xl">🛡️</span>
+                            <span class="font-medium">Страховка 100 млн ₸</span>
+                            <!-- Тултип -->
+                            <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                                Если мы ошибёмся — заплатит страховая, не вы
+                            </div>
                         </div>
                     </div>
-                    <div class="absolute -top-10 -right-10 w-40 h-40 bg-accent/20 rounded-full blur-3xl"></div>
-                    <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-secondary/20 rounded-full blur-3xl"></div>
+
+                    <!-- Микро-текст -->
+                    <p class="mt-3 text-sm text-gray-500 text-center lg:text-left">
+                        Перезвоним за 15 минут • Без спама • Это диагностика, не продажа
+                    </p>
+
                 </div>
+
+                <!-- Правая колонка — фото (только на десктопе) -->
+                <div class="lg:col-span-2 order-1 lg:order-2 text-center hidden lg:block" data-aos="fade-left">
+                    <div class="relative inline-block">
+                        <img src="img/Nurlan.png"
+                             alt="Нурлан Джарманов, основатель BBC"
+                             class="w-64 lg:w-80 mx-auto rounded-xl shadow-lg">
+                        <div class="absolute -top-6 -right-6 w-32 h-32 bg-accent/20 rounded-full blur-2xl -z-10"></div>
+                        <div class="absolute -bottom-6 -left-6 w-32 h-32 bg-secondary/20 rounded-full blur-2xl -z-10"></div>
+                    </div>
+                    <div class="mt-4">
+                        <h3 class="text-xl font-bold text-gray-800">Нурлан Джарманов</h3>
+                        <p class="text-gray-600 text-sm">Основатель BBC, эксперт по налоговой оптимизации</p>
+                        <p class="text-gray-400 text-xs mt-1">15 лет в консалтинге • Сэкономили клиентам 500+ млн ₸</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Строка социального доказательства -->
+        <div class="bg-slate-50 border-t border-slate-100 py-4">
+            <div class="container mx-auto text-center text-gray-500 text-sm flex flex-wrap justify-center gap-x-6 gap-y-2">
+                <span class="font-medium">15 лет на рынке</span>
+                <span class="hidden sm:inline">•</span>
+                <span class="font-medium">500+ клиентов</span>
+                <span class="hidden sm:inline">•</span>
+                <span class="font-medium">300 млн ₸ сэкономили</span>
             </div>
         </div>
     </section>
