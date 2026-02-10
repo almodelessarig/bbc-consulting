@@ -199,10 +199,45 @@
                         </div>
                     </div>
 
-                    <!-- 4. Микро-текст (mobile: order-4, desktop: order-6) -->
-                    <p class="order-4 md:order-6 mt-2 text-sm text-gray-500 text-center lg:text-left">
-                        Перезвоним за 15 минут • Проведём первичную диагностику вашего бизнеса
-                    </p>
+                    <!-- Быстрая форма для рекламного трафика -->
+                    <div class="order-4 md:order-6 mt-6 bg-white rounded-xl shadow-lg p-5 border border-gray-100" x-data="{ qName: '', qPhone: '', qSending: false, qSent: false }">
+                        <p class="text-sm font-bold text-gray-700 mb-3">Или оставьте номер — перезвоним за 15 минут:</p>
+                        <form @submit.prevent="
+                            if (!qName || !qPhone) return;
+                            qSending = true;
+                            const p = new URLSearchParams(window.location.search);
+                            fetch('/api/send-telegram', {
+                                method: 'POST',
+                                headers: {'Content-Type': 'application/json'},
+                                body: JSON.stringify({
+                                    name: qName, phone: qPhone,
+                                    services: 'Быстрая заявка (главная)',
+                                    problems: 'Не указано', employees: 'Не указано', turnover: 'Не указано',
+                                    utm_source: p.get('utm_source')||'', utm_medium: p.get('utm_medium')||'',
+                                    utm_campaign: p.get('utm_campaign')||'', utm_term: p.get('utm_term')||'',
+                                    utm_content: p.get('utm_content')||'',
+                                    page_url: window.location.href, referrer: document.referrer
+                                })
+                            }).then(r => r.json()).then(() => {
+                                qSent = true;
+                                if (typeof fbq !== 'undefined') fbq('track', 'Lead');
+                                if (typeof ym !== 'undefined') ym(106323355, 'reachGoal', 'lead_quick');
+                            }).catch(() => { qSent = true; });
+                            qSending = false;
+                        " x-show="!qSent" class="flex flex-col sm:flex-row gap-2">
+                            <input type="text" required x-model="qName" placeholder="Имя"
+                                class="flex-1 p-3 border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none text-sm">
+                            <input type="tel" required x-model="qPhone" placeholder="+7 (___) ___-__-__"
+                                class="flex-1 p-3 border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none text-sm">
+                            <button type="submit" :disabled="qSending"
+                                class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition whitespace-nowrap text-sm disabled:opacity-50">
+                                Перезвоните мне
+                            </button>
+                        </form>
+                        <div x-show="qSent" x-cloak class="text-center py-2">
+                            <p class="text-green-600 font-bold">Спасибо! Перезвоним в течение 15 минут.</p>
+                        </div>
+                    </div>
 
                     <!-- 5. Буллеты с преимуществами (mobile: order-5, desktop: order-3) -->
                     <ul class="order-5 md:order-3 mt-6 space-y-3">
@@ -1179,9 +1214,9 @@
                 <span class="flex items-center gap-2">✓ 15 лет опыта</span>
             </div>
 
-            <!-- Таймер срочности -->
+            <!-- Акция -->
             <div class="mt-10 p-6 bg-white/10 rounded-lg inline-block" x-data="countdown()" x-init="init()">
-                <p class="text-yellow-300 font-bold mb-2">Акция: Бесплатный аудит готовности к НК 2026</p>
+                <p class="text-yellow-300 font-bold mb-2">Бесплатный аудит готовности к НК 2026</p>
 
                 <div class="flex justify-center gap-4 mb-4">
                     <div class="text-center">
@@ -1200,7 +1235,7 @@
                     </div>
                 </div>
 
-                <p class="text-sm text-blue-100">Только до конца января — проверим ваш бизнес бесплатно</p>
+                <p class="text-sm text-blue-100">Только до конца февраля — проверим ваш бизнес бесплатно</p>
             </div>
         </div>
     </section>
@@ -1425,7 +1460,7 @@
                 hours: '00',
                 minutes: '00',
                 init() {
-                    const endDate = new Date('2026-01-31T23:59:59');
+                    const endDate = new Date('2026-02-28T23:59:59');
                     const update = () => {
                         const now = new Date();
                         const diff = endDate - now;
@@ -1444,7 +1479,7 @@
         // Calculator Logic
         function calculator() {
             return {
-                size: null,
+                size: 'medium',
 
                 // Данные по пакетам
                 packages: {
