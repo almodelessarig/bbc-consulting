@@ -608,19 +608,18 @@
                             body: JSON.stringify(formData)
                         });
                         const result = await response.json();
+                        if (typeof fbq !== 'undefined') fbq('track', 'Lead');
+                        if (typeof ym !== 'undefined') ym(106323355, 'reachGoal', 'lead_4v1');
                         if (result.success) {
-                            this.submitted = true;
-                            if (typeof fbq !== 'undefined') fbq('track', 'Lead');
-                            if (typeof ym !== 'undefined') ym(106323355, 'reachGoal', 'lead_4v1');
+                            window.location.href = '/thank-you';
                         } else {
                             alert('Произошла ошибка. Пожалуйста, позвоните нам: +7 (700) 123-54-24');
+                            this.submitting = false;
                         }
                     } catch (error) {
                         console.error('Error:', error);
-                        this.submitted = true;
-                        if (typeof fbq !== 'undefined') fbq('track', 'Lead');
+                        window.location.href = '/thank-you';
                     }
-                    this.submitting = false;
                 }
             }
         }
